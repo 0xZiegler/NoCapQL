@@ -3,7 +3,7 @@ import { QUERIES } from "../utils/query.js";
 import { formatXP } from "../utils/utils.js";
 
 export async function userProjects(token) {
-    const result = await graphQLRequest(QUERIES.USER_PROJECTS, {}, token);
+    const result = await graphQLRequest(QUERIES.USER_PROJECTS, token);
     const transactions = result?.data?.user?.[0]?.transactions || [];
 
     const { project, checkpoints } = transactions.reduce(

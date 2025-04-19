@@ -4,21 +4,20 @@ import { graphQLRequest } from '../api.js';
 import { QUERIES } from '../utils/query.js';
 
 export async function userBoard(token) {
-    /* ------------------------------------------------ 1. fetch --------------------------------- */
+    /* ----------------------------------- fetch --------------------------------- */
     const [userRes, groupRes] = await Promise.all([
-        graphQLRequest(QUERIES.USERBOARD, {}, token),
-        graphQLRequest(QUERIES.FINISHED_MODULE_GROUPS, {}, token)
+        graphQLRequest(QUERIES.USERBOARD, token),
+        graphQLRequest(QUERIES.FINISHED_MODULE_GROUPS, token)
     ]);
 
     const users = userRes?.data?.user_public_view ?? [];
     const groups = groupRes?.data?.group ?? [];
 
-    /* --------------------------- 2. accumulate XP & projects (skip piscine) -------------------- */
+    /* --------------------------- accumulate XP & projects (skip piscine) -------------------- */
     const extra = Object.create(null);          // { login: { xp , projects:Set } }
 
     for (const { members } of groups) {
         for (const { userLogin, path } of members) {
-            /** ignore any /oujda/module/piscine… project */
             if (path.startsWith('/oujda/module/piscine')) continue;
 
             const pname = path.split('/oujda/module/')[1] || '';
@@ -32,7 +31,7 @@ export async function userBoard(token) {
         }
     }
 
-    /* --------------------------- 3. merge, format, default sort (by level ↓) ------------------- */
+    /* --------------------------- merge, format, default sort (by level ↓) ------------------- */
     const data = users
         .map(u => {
             const ev = u.events_aggregate?.nodes?.[0];
@@ -55,7 +54,7 @@ export async function userBoard(token) {
         .filter(Boolean)
         .sort((a, b) => b.level - a.level);
 
-    /* --------------------------- 4. helper  one row ------------------------------------------- */
+    /* --------------------------- Construct a row ------------------------------------------- */
     const rowHTML = (u, idx) => `
     <li class="project-item ${u.canAccess ? '' : 'inactive-user'}"
         data-name="${u.name.toLowerCase()}"
@@ -75,7 +74,7 @@ export async function userBoard(token) {
       <span class="project-joined">${u.joined}</span>
     </li>`;
 
-    /* --------------------------- 5. final HTML -------------------------------------------------- */
+    /* ------------------------------------ HTML -------------------------------------------------- */
     return `
     <div id="user-board" class="project-section">
       <p class="stat-title">User Leaderboard (${data.length})</p>

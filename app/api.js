@@ -39,7 +39,7 @@ export async function loginAPI() {
 };
 
 // GraphQL API service (GraphQL request)
-export const graphQLRequest = async (query, variables = {}, token) => {
+export const graphQLRequest = async (query, token) => {
     try {
         const response = await fetch(API.DATA_ENDPOINT, {
             method: 'POST',
@@ -47,7 +47,7 @@ export const graphQLRequest = async (query, variables = {}, token) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}` ,
             },
-            body: JSON.stringify({ query, variables }),
+            body: JSON.stringify({ query }),
         });
 
         if (!response.ok) {

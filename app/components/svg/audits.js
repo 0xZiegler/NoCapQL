@@ -2,7 +2,7 @@ import { graphQLRequest } from '../../api.js';
 import { QUERIES } from '../../utils/query.js';
 
 export async function userAudits(token) {
-    const result = await graphQLRequest(QUERIES.USER_AUDITS, {}, token);
+    const result = await graphQLRequest(QUERIES.USER_AUDITS, token);
     const user = result?.data?.user?.[0];
 
     const success = user?.sucess?.aggregate?.count || 0;

@@ -3,7 +3,7 @@ import { formatXP } from '../utils/utils.js';
 import { QUERIES } from '../utils/query.js';
 
 export async function userXP(token) {
-    const xpResult = await graphQLRequest(QUERIES.USER_XP, {}, token);
+    const xpResult = await graphQLRequest(QUERIES.USER_XP, token);
     const totalXP = xpResult?.data?.transaction_aggregate?.aggregate?.sum?.amount ?? 0;
 
     return `

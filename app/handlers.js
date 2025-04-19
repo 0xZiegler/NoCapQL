@@ -50,7 +50,7 @@ export async function renderProfile() {
 
     showLoading();
 
-    const userName = await graphQLRequest(QUERIES.USER_PROFILE, {}, token);
+    const userName = await graphQLRequest(QUERIES.USER_PROFILE, token);
     if (!userName || !userName.data) {
         localStorage.removeItem('JWT');
         renderLogin();

@@ -2,7 +2,7 @@ import { graphQLRequest } from '../api.js';
 import { QUERIES } from '../utils/query.js';
 
 export async function userLevel(token) {
-    const levelResult = await graphQLRequest(QUERIES.USER_LEVEL, {}, token);
+    const levelResult = await graphQLRequest(QUERIES.USER_LEVEL, token);
     const currentLevel = levelResult?.data?.transaction?.[0]?.amount ?? 0;
 
     return `
