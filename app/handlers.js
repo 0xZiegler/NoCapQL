@@ -1,6 +1,7 @@
 import { hideShowPassword, removeError } from './utils.js';
 import { loginAPI, graphQLRequest } from './api.js';
 import { QUERIES } from './query.js';
+// Components
 import { userLevel } from './content/level.js';
 import { userXP } from './content/xp.js';
 import { userProjects } from './content/projects.js';
