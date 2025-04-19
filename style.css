@@ -1,0 +1,485 @@
+@import url('https://fonts.googleapis.com/css2?family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #253969;
+    height: max-content;
+    min-height: 100vh;
+    /*background: #2e4170;*/
+}
+
+.login-container {
+    position: absolute;
+    width: 95%;
+    background: #0f172a;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    color: #fff;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.login-container h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.login-container p {
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    position: relative;
+    /* This is to anchor the icon */
+    display: flex;
+    align-items: center;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 25px;
+    background: #1e293b;
+    color: #fff;
+    outline: none;
+    font-size: 14px;
+}
+
+button#loginBtn {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+
+/************************************ No Script styles *****************************************/
+/***********************************************************************************************/
+.noscript-message {
+    background: #0f172a;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding: 40px 20px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/***************************************** Password toggle *************************************/
+/***********************************************************************************************/
+.password-group {
+    position: relative;
+}
+
+.password-group input {
+    padding-right: 40px;
+}
+
+#togglePassword {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+#togglePassword:hover {
+    opacity: 1;
+}
+
+@media (max-width:300px) {
+    .login-container {
+        padding: 20px 20px;
+    }
+
+    #togglePassword {
+        right: 30px;
+    }
+}
+
+.error-message {
+    text-align: left;
+    color: #d9534f;
+}
+
+/**********************************************************************************************
+*                                      Navbar styles
+***********************************************************************************************/
+.navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.85);
+    padding: 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    backdrop-filter: blur(6px);
+    z-index: 999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-left span {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.navbar-left strong {
+    color: #8b5cf6;
+
+}
+
+.navbar-right button {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    border-radius: 40px;
+    font-size: 26px;
+    cursor: pointer;
+    font-family: 'Zain', sans-serif;
+    font-weight: 600;
+}
+
+.navbar-right button:hover {
+    color: #b3c9fd;
+}
+
+@media (max-width: 700px) {
+    .navbar-left span {
+        font-size: 20px;
+    }
+
+    .navbar-right button {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .stat-grid {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+    }
+
+    .project-section {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+    }
+}
+
+/********************************** Level and XP styles ***************************************/
+/**********************************************************************************************/
+.stat-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 60px;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.stat-card {
+    background: #c5ae6f;
+    background: #0f172a;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-align: center;
+    flex: 1 1 300px;
+    max-width: 600px;
+}
+
+/* .stat-card:hover {
+    background: #070f1b;
+    transition: background 0.3s ease;
+} */
+
+.stat-title {
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: #e2e8f0;
+    border-bottom: 2px solid #6366f1;
+    display: inline-block;
+    padding-bottom: 4px;
+    font-family: 'Zain', sans-serif;
+    font-weight: 600;
+}
+
+.stat-circle {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    font-size: 50px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    color: rgb(228, 228, 228);
+    margin: 20px auto 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.xp-value {
+    font-family: 'Zain', sans-serif;
+    margin-top: 38px;
+    font-weight: bold;
+    font-size: 70px;
+}
+
+.amountPurple {
+    color: #9266f8;
+}
+
+/***************************************** Project List styles *********************************/
+/***********************************************************************************************/
+.project-section {
+    margin-top: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 30px;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    max-width: 1230px;
+    max-height: 400px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 transparent;
+}
+
+@media (max-width: 1230px) {
+    .project-section {
+        margin-left: 25px;
+        margin-right: 25px;
+    }
+}
+
+/* Scrollbar Styling */
+.project-section::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.project-section::-webkit-scrollbar-thumb {
+    background-color: #8b5cf6;
+    border-radius: 6px;
+}
+
+.project-section::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.project-section .stat-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+    border-bottom: 2px solid #8b5cf6;
+    display: inline-block;
+    padding-bottom: 4px;
+}
+
+.project-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #1e293b;
+    font-size: 14px;
+}
+
+.project-name {
+    flex: 1;
+    text-align: left;
+}
+
+.project-xp {
+    flex: 0 0 100px;
+    color: #22c55e;
+    text-align: center;
+}
+
+
+.project-date {
+    flex: 0 0 100px;
+    text-align: right;
+    color: #94a3b8;
+}
+
+.project-members {
+    flex: 1;
+    text-align: right;
+    color: #a78bfa;
+    font-size: 13px;
+}
+
+@media (max-width: 750px) {
+    .project-section {
+        overflow-x: auto;
+    }
+
+    .project-list {
+        min-width: 600px;
+        display: block;
+    }
+
+    .project-item {
+        display: flex;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        min-width: 600px;
+        gap: 10px;
+    }
+
+    .project-name,
+    .project-xp,
+    .project-date,
+    .project-members {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}
+
+/************************************ USERBOARD STYLES *****************************************/
+/***********************************************************************************************/
+.inactive-user {
+    color: #f87171;
+    /* red text for can't access users */
+}
+
+.project-rank {
+    flex: 0 0 40px;
+    color: #8b5cf6;
+    font-weight: bold;
+    font-size: small;
+}
+
+.project-joined {
+    flex: 0 0 140px;
+    text-align: right;
+    font-size: 13px;
+    color: #38bdf8;
+}
+
+
+/************************************** Skills styles ******************************************/
+/***********************************************************************************************/
+.skill-bar-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.skill-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.skill-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.skill-name {
+    flex: 0 0 120px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.skill-percent {
+    flex-shrink: 0;
+    color: #fff;
+    margin-left: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media (max-width: 750px) {
+    .skill-bar-wrapper {
+        overflow-x: auto;
+    }
+
+    .skill-bar-container {
+        min-width: 600px;
+    }
+
+    .skill-bar {
+        min-width: 600px;
+        white-space: nowrap;
+    }
+}
+
+/******************************************* Audit Chart ***************************************/
+/***********************************************************************************************/
+.audit-chart-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: auto;
+}
+
+.audit-chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 300px;
+    margin: auto;
+}
+
+.legend {
+    font-size: 14px;
+    color: #fff;
+    text-align: left;
+}
+
+.legend-box {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    border-radius: 2px;
+    margin-top: 20px;
+}
