@@ -363,18 +363,14 @@ button#loginBtn {
 
     .project-item {
         display: flex;
-        flex-wrap: nowrap;
-        white-space: nowrap;
         min-width: 600px;
-        gap: 10px;
+        gap: 15px;
     }
 
     .project-name,
     .project-xp,
     .project-date,
     .project-members {
-        white-space: nowrap;
-        text-overflow: ellipsis;
         overflow: hidden;
     }
 }
