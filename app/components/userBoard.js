@@ -31,7 +31,7 @@ export async function userBoard(token) {
         }
     }
 
-    /* --------------------------- merge, format, default sort (by level ↓) ------------------- */
+    /* --------------------------- merge, format, default sort (by xp ↓) ------------------- */
     const data = users
         .map(u => {
             const ev = u.events_aggregate?.nodes?.[0];
@@ -52,7 +52,7 @@ export async function userBoard(token) {
             };
         })
         .filter(Boolean)
-        .sort((a, b) => b.level - a.level);
+        .sort((a, b) => b.xpNum - a.xpNum);
 
     /* --------------------------- Construct a row ------------------------------------------- */
     const rowHTML = (u, idx) => `
