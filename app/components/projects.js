@@ -1,6 +1,6 @@
 import { graphQLRequest } from "../api.js";
-import { QUERIES } from "../query.js";
-import { formatXP } from "../utils.js";
+import { QUERIES } from "../utils/query.js";
+import { formatXP } from "../utils/utils.js";
 
 export async function userProjects(token) {
     const result = await graphQLRequest(QUERIES.USER_PROJECTS, {}, token);

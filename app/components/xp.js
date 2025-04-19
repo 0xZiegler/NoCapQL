@@ -1,6 +1,6 @@
 import { graphQLRequest } from '../api.js';
-import { formatXP } from '../utils.js';
-import { QUERIES } from '../query.js';
+import { formatXP } from '../utils/utils.js';
+import { QUERIES } from '../utils/query.js';
 
 export async function userXP(token) {
     const xpResult = await graphQLRequest(QUERIES.USER_XP, {}, token);

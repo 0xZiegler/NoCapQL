@@ -78,6 +78,20 @@ export const QUERIES = {
         }
     }`,
 
+    FINISHED_MODULE_GROUPS: `{
+        group(
+            where: {
+                status: { _eq: finished }
+                members: { path: { _like: "/oujda/module/%" } }  
+            }
+        ){
+            members {
+                userLogin
+                path         
+            }
+        }
+    }`,
+
     // with Arguments (_nin)
     USER_SKILLS: `{
         user {

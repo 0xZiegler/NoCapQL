@@ -1,13 +1,16 @@
-import { hideShowPassword, removeError } from './utils.js';
+import { hideShowPassword, removeError } from './utils/utils.js';
 import { loginAPI, graphQLRequest } from './api.js';
-import { QUERIES } from './query.js';
+import { QUERIES } from './utils/query.js';
+import { bindUserBoardSort } from './utils/userBoardSort.js';
+
 // Components
-import { userLevel } from './content/level.js';
-import { userXP } from './content/xp.js';
-import { userProjects } from './content/projects.js';
-import { userBoard } from './content/userBoard.js';
-import { userSkills } from './content/svg/skills.js';
-import { userAudits } from './content/svg/audits.js';
+import { showLoading, hideLoading } from './components/loading.js';
+import { userLevel } from './components/level.js';
+import { userXP } from './components/xp.js';
+import { userProjects } from './components/projects.js';
+import { userBoard } from './components/userBoard.js';
+import { userSkills } from './components/svg/skills.js';
+import { userAudits } from './components/svg/audits.js';
 
 
 // Render the login form and bind login API process
@@ -45,6 +48,8 @@ export async function renderProfile() {
         return;
     }
 
+    showLoading();
+
     const userName = await graphQLRequest(QUERIES.USER_PROFILE, {}, token);
     if (!userName || !userName.data) {
         localStorage.removeItem('JWT');
@@ -59,6 +64,8 @@ export async function renderProfile() {
     const auditChart = await userAudits(token);
 
     const { firstName = '', lastName = '' } = userName?.data?.user?.[0] || {};
+
+    hideLoading();
 
     document.body.innerHTML = `
     <div class="navbar">
@@ -80,6 +87,8 @@ export async function renderProfile() {
         ${auditChart}
     </div>
     `;
+
+    bindUserBoardSort(); 
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.removeItem('JWT');

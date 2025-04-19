@@ -1,5 +1,5 @@
 import { renderProfile } from "./handlers.js";
-import { displayError } from "./utils.js";
+import { displayError } from "./utils/utils.js";
 
 export const API = {
     DATA_ENDPOINT: 'https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql',

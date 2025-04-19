@@ -1,5 +1,5 @@
 import { graphQLRequest } from '../../api.js';
-import { QUERIES } from '../../query.js';
+import { QUERIES } from '../../utils/query.js';
 
 export async function userSkills(token) {
     const result = await graphQLRequest(QUERIES.USER_SKILLS, {}, token);
