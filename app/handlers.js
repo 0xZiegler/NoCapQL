@@ -81,8 +81,8 @@ export async function renderProfile() {
             ${levelCard}
             ${xpCard}
         </div>
-        ${boardList}
         ${projectList}
+        ${boardList}
         ${skillBars}
         ${auditChart}
     </div>

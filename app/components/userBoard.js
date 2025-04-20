@@ -88,7 +88,7 @@ export async function userBoard(token) {
     <div id="user-board" class="project-section">
       <!-- header line with title & filter -->
       <div class="board-header">
-        <p class="stat-title">User Leaderboard (${data.length})</p>
+        <p class="stat-title">Leaderboard (${data.length})</p>
 
         <select id="join-filter" class="join-filter">
           ${optionsHTML}
@@ -101,7 +101,7 @@ export async function userBoard(token) {
           <span class="project-name  sortable" data-key="name"      >Name</span>
           <span class="project-level sortable" data-key="level"     >Level</span>
           <span class="project-audit sortable" data-key="audit"     >Audit</span>
-          <span class="project-xp    sortable" data-key="xpnum"     >XP ( ±3KB )</span>
+          <span class="project-xp    sortable" data-key="xpnum"     >≈ XP</span>
           <span class="project-count sortable" data-key="projcount" >Projects</span>
           <span class="project-members sortable" data-key="login"   >Username</span>
           <span class="project-joined">Joined</span>
