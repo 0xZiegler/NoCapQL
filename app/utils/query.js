@@ -106,8 +106,6 @@ export const QUERIES = {
 
 
     // Nested (user → audits_aggregate → aggregate → count)
-    // with Aggregation (audits_aggregate)
-    // with Aliases (failed_audits)
     USER_AUDITS: `{
         user {
             auditRatio

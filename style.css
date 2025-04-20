@@ -289,6 +289,33 @@ button#loginBtn {
     border-bottom: 1px solid #1e293b;
 }
 
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.join-filter {
+    background: #0f172a;
+    color: #ffffff;
+    border: 1px solid #8b5cf6;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Zain', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin-top: -30px;
+}
+
+@media (max-width: 460px) {
+    .join-filter {
+        margin-top: 5px;
+    } 
+}
+
 .project-level,
 .project-audit,
 .project-count {

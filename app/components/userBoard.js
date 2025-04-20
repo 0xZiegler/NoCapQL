@@ -1,25 +1,25 @@
+// userBoard.js
 import { PROJECTS_XP } from '../utils/projects-xp.js';
 import { formatXP } from '../utils/utils.js';
 import { graphQLRequest } from '../api.js';
 import { QUERIES } from '../utils/query.js';
 
 export async function userBoard(token) {
-    /* ----------------------------------- fetch --------------------------------- */
+    /* --------------------------- 1. fetch both datasets --------------------------- */
     const [userRes, groupRes] = await Promise.all([
         graphQLRequest(QUERIES.USERBOARD, token),
-        graphQLRequest(QUERIES.FINISHED_MODULE_GROUPS, token)
+        graphQLRequest(QUERIES.FINISHED_MODULE_GROUPS, token),
     ]);
 
     const users = userRes?.data?.user_public_view ?? [];
     const groups = groupRes?.data?.group ?? [];
 
-    /* --------------------------- accumulate XP & projects (skip piscine) -------------------- */
-    const extra = Object.create(null);          // { login: { xp , projects:Set } }
+    /* --------------------------- 2. xp / project aggregation --------------------------- */
+    const extra = Object.create(null);                 // { login → { xp, projects:Set } }
 
     for (const { members } of groups) {
         for (const { userLogin, path } of members) {
-            if (path.startsWith('/oujda/module/piscine')) continue;
-
+            if (path.startsWith('/oujda/module/piscine')) continue;       // skip piscine‑projects
             const pname = path.split('/oujda/module/')[1] || '';
             if (!pname) continue;
 
@@ -31,7 +31,7 @@ export async function userBoard(token) {
         }
     }
 
-    /* --------------------------- merge, format, default sort (by xp ↓) ------------------- */
+    /* --------------------------- 3. merge core + extra stats --------------------------- */
     const data = users
         .map(u => {
             const ev = u.events_aggregate?.nodes?.[0];
@@ -44,26 +44,26 @@ export async function userBoard(token) {
                 canAccess: u.canAccessPlatform,
                 level: ev.level ?? 0,
                 audit: +ev.userAuditRatio,
-                joined: new Date(ev.createdAt).toLocaleDateString(),
+                joined: new Date(ev.createdAt).toLocaleDateString(),   // "12/22/2024"
                 name: ev.userName ?? 'Unknown',
                 xpNum: ex.xp,
                 xpStr: formatXP(ex.xp),
-                projCount: ex.projects.size
+                projCount: ex.projects.size,
             };
         })
         .filter(Boolean)
-        .sort((a, b) => b.xpNum - a.xpNum);
+        .sort((a, b) => b.xpNum - a.xpNum);        // default order = XP ↓
 
-    /* --------------------------- Construct a row ------------------------------------------- */
-    const rowHTML = (u, idx) => `
+    /* --------------------------- 4. build <li> helper --------------------------- */
+    const rowHTML = (u, idx) => /* html */`
     <li class="project-item ${u.canAccess ? '' : 'inactive-user'}"
         data-name="${u.name.toLowerCase()}"
         data-level="${u.level}"
         data-audit="${u.audit}"
         data-xpnum="${u.xpNum}"
         data-projcount="${u.projCount}"
-        data-login="${u.login.toLowerCase()}">
-
+        data-login="${u.login.toLowerCase()}"
+        data-joined="${u.joined}">
       <span class="project-rank">${idx + 1}</span>
       <span class="project-name">${u.name}</span>
       <span class="project-level">${u.level}</span>
@@ -74,13 +74,28 @@ export async function userBoard(token) {
       <span class="project-joined">${u.joined}</span>
     </li>`;
 
-    /* ------------------------------------ HTML -------------------------------------------------- */
-    return `
+    /* --------------------------- 5. create Drop‑down options (unique join‑dates) --------------------------- */
+    const joinDates = [...new Set(data.map(u => u.joined))]           // unique
+        .sort((a, b) => new Date(a) - new Date(b));   // asc
+
+    const optionsHTML = [
+        '<option value="all">All</option>',
+        ...joinDates.map(d => `<option value="${d}">${d}</option>`),
+    ].join('');
+
+    /* --------------------------- 6. final HTML --------------------------- */
+    return /* html */`
     <div id="user-board" class="project-section">
-      <p class="stat-title">User Leaderboard (${data.length})</p>
+      <!-- header line with title & filter -->
+      <div class="board-header">
+        <p class="stat-title">User Leaderboard (${data.length})</p>
+
+        <select id="join-filter" class="join-filter">
+          ${optionsHTML}
+        </select>
+      </div>
 
       <ul id="board-body" class="project-list">
-        <!-- header -->
         <li class="project-item project-header">
           <span class="project-rank">#</span>
           <span class="project-name  sortable" data-key="name"      >Name</span>

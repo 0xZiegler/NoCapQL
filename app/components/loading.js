@@ -6,7 +6,7 @@ export function showLoading() {
       <div class="loader"></div>
       <p>Fetching data…</p>
     `;
-    document.body.innerHTML = '';     // clear whatever is there
+    document.body.innerHTML = '';
     document.body.appendChild(el);
 }
 
