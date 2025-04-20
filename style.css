@@ -325,12 +325,13 @@ button#loginBtn {
     font-family: 'Zain', sans-serif;
     font-weight: 600;
     font-size: 20px;
-    margin-top: -30px;
+    margin-top: -25px;
 }
 
-@media (max-width: 460px) {
+@media (max-width: 457px) {
     .join-filter {
-        margin-top: 5px;
+        margin-top: 3px;
+        margin-bottom: 5px;
     }
 }
 

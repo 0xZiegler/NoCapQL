@@ -5,7 +5,7 @@ import { graphQLRequest } from '../api.js';
 import { QUERIES } from '../utils/query.js';
 
 export async function userBoard(token) {
-    /* --------------------------- 1. fetch both datasets --------------------------- */
+    /* --------------------------- fetch both datasets --------------------------- */
     const [userRes, groupRes] = await Promise.all([
         graphQLRequest(QUERIES.USERBOARD, token),
         graphQLRequest(QUERIES.FINISHED_MODULE_GROUPS, token),
@@ -14,7 +14,7 @@ export async function userBoard(token) {
     const users = userRes?.data?.user_public_view ?? [];
     const groups = groupRes?.data?.group ?? [];
 
-    /* --------------------------- 2. xp / project aggregation --------------------------- */
+    /* --------------------------- xp / project aggregation --------------------------- */
     const extra = Object.create(null);                 // { login → { xp, projects:Set } }
 
     for (const { members } of groups) {
@@ -31,7 +31,7 @@ export async function userBoard(token) {
         }
     }
 
-    /* --------------------------- 3. merge core + extra stats --------------------------- */
+    /* --------------------------- merge core + extra stats --------------------------- */
     const data = users
         .map(u => {
             const ev = u.events_aggregate?.nodes?.[0];
@@ -54,7 +54,7 @@ export async function userBoard(token) {
         .filter(Boolean)
         .sort((a, b) => b.xpNum - a.xpNum);        // default order = XP ↓
 
-    /* --------------------------- 4. build <li> helper --------------------------- */
+    /* --------------------------- build <li> helper --------------------------- */
     const rowHTML = (u, idx) => /* html */`
     <li class="project-item ${u.canAccess ? '' : 'inactive-user'}"
         data-name="${u.name.toLowerCase()}"
@@ -74,7 +74,7 @@ export async function userBoard(token) {
       <span class="project-joined">${u.joined}</span>
     </li>`;
 
-    /* --------------------------- 5. create Drop‑down options (unique join‑dates) --------------------------- */
+    /* --------------------------- create Drop‑down options (unique join‑dates) --------------------------- */
     const joinDates = [...new Set(data.map(u => u.joined))]           // unique
         .sort((a, b) => new Date(a) - new Date(b));   // asc
 
@@ -88,7 +88,7 @@ export async function userBoard(token) {
     <div id="user-board" class="project-section">
       <!-- header line with title & filter -->
       <div class="board-header">
-        <p class="stat-title">Leaderboard (${data.length})</p>
+        <p class="stat-title">Talents Leaderboard (${data.length})</p>
 
         <select id="join-filter" class="join-filter">
           ${optionsHTML}
