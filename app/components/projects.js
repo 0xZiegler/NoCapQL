@@ -2,73 +2,92 @@ import { graphQLRequest } from "../api.js";
 import { QUERIES } from "../utils/query.js";
 import { formatXP } from "../utils/utils.js";
 
+/** Fetch the list of projects and checkpoints for the user **/
 export async function userProjects(token) {
-    const result = await graphQLRequest(QUERIES.USER_PROJECTS, token);
-    const transactions = result?.data?.user?.[0]?.transactions || [];
+    const res = await graphQLRequest(QUERIES.USER_PROJECTS, token);
+    const txs = res?.data?.user?.[0]?.transactions ?? [];
 
-    const { project, checkpoints } = transactions.reduce(
-        (acc, tx) => {
-            const amount = tx?.amount ?? 0;
-            const createdAt = new Date(tx?.createdAt);
-            const dateKey = createdAt.toLocaleDateString();
-            const name = tx?.object?.name ?? "Untitled";
+    /*separate normal projects and checkpoints */
+    const normalProjects = [];             // each item = { rawDate, html }
+    const checkpoints = new Map();         // key = dd/mm/yy → { rawDate, names[], xp }
 
-            const members =
-                [
-                    ...new Set(
-                        tx?.object?.progresses
-                            ?.flatMap(p => p?.group?.members ?? [])
-                            .map(m => m.userLogin)
-                    ),
-                ].join(", ") || "N/A";
+    txs.forEach(tx => {
+        const amount = tx?.amount ?? 0;
+        const created = new Date(tx?.createdAt);
+        const dateKey = created.toLocaleDateString();           // e.g. 04/01/2025
+        const name = tx?.object?.name ?? "Untitled";
+        const members = collectMemberLogins(tx?.object?.progresses);
 
-            if (amount < 1000) {
-                const cp = acc.checkpoints.get(dateKey) ?? {
-                    rawDate: createdAt,
-                    names: [],
-                    xp: 0,
-                };
-                cp.names.push(name);
-                cp.xp += amount;
-                acc.checkpoints.set(dateKey, cp);
-            } else {
-                acc.project.push({
-                    rawDate: createdAt,
-                    html: `
-            <li class="project-item">
-              <span class="project-name">${name}</span>
-              <span class="project-xp">${formatXP(amount)}</span>
-              <span class="project-date">${dateKey}</span>
-              <span class="project-members">${members}</span>
-            </li>`,
-                });
-            }
-            return acc;
-        },
-        { project: [], checkpoints: new Map() }
-    );
+        /* Checkpoints */
+        if (amount < 1000) {
+            const bucket = checkpoints.get(dateKey) ?? {
+                rawDate: created,
+                names: [],
+                xp: 0,
+            };
+            bucket.names.push(name);
+            bucket.xp += amount;
+            checkpoints.set(dateKey, bucket);
+            return;
+        }
 
-    // Convert checkpoints → items
-    const ckItems = [...checkpoints.values()].map(({ rawDate, names, xp }) => ({
-        rawDate,
-        html: `
-      <li class="project-item checkpoint-item">
-        <span class="project-name">Checkpoint (${names.length} / 10)</span>
-        <span class="project-xp">${formatXP(xp)}</span>
-        <span class="project-date">${rawDate.toLocaleDateString()}</span>
-        <span class="project-members">N/A</span>
-      </li>`,
+        /* Normal project → push its final HTML immediately */
+        normalProjects.push({
+            rawDate: created,
+            html: projectItemHTML({ name, amount, dateKey, members }),
+        });
+    });
+
+    /* turn the checkpoint buckets into list items as well */
+    const checkpointItems = [...checkpoints.values()].map(b => ({
+        rawDate: b.rawDate,
+        html: checkpointItemHTML({
+            count: b.names.length,
+            amount: b.xp,
+            dateKey: b.rawDate.toLocaleDateString(),
+        }),
     }));
 
-    const listItems = [...project, ...ckItems]
+    /* merge, sort desc by date, and join into one big string */
+    const listHTML = [...normalProjects, ...checkpointItems]
         .sort((a, b) => b.rawDate - a.rawDate)
-        .map(i => i.html)
+        .map(item => item.html)
         .join("");
 
+    /* wrap everything in the section container */
     return `
     <div class="project-section">
-      <p class="stat-title">Projects Done (${transactions.length})</p>
-      <ul class="project-list">${listItems}</ul>
+      <p class="stat-title">Projects Done (${txs.length})</p>
+      <ul class="project-list">${listHTML}</ul>
     </div>
-    `;
+  `;
 }
+
+/** Helpers **/
+/** Extract the list of unique members that worked on the project **/
+const collectMemberLogins = progresses =>
+    [
+        ...new Set(
+            progresses
+                ?.flatMap(p => p?.group?.members ?? [])
+                .map(m => m.userLogin)
+        ),
+    ].join(", ") || "N/A";
+
+/** Build the <li> representing a project row **/
+const projectItemHTML = ({ name, amount, dateKey, members }) => `
+    <li class="project-item">
+        <span class="project-name">${name}</span>
+        <span class="project-xp">${formatXP(amount)}</span>
+        <span class="project-date">${dateKey}</span>
+        <span class="project-members">${members}</span>
+    </li>`;
+
+/** Build the <li> representing a checkpoint row **/
+const checkpointItemHTML = ({ count, amount, dateKey }) => `
+    <li class="project-item checkpoint-item">
+        <span class="project-name">Checkpoint (${count} / 10)</span>
+        <span class="project-xp">${formatXP(amount)}</span>
+        <span class="project-date">${dateKey}</span>
+        <span class="project-members">N/A</span>
+    </li>`;
