@@ -64,7 +64,6 @@ export const graphQLRequest = async (query, token) => {
 
         return result;
     } catch (error) {
-        hideLoading();
         console.error("GraphQL request failed:", error);
         apiError = "Failed to fetch some data. Please try again.";
     }

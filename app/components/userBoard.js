@@ -83,8 +83,8 @@ export async function userBoard(token) {
         ...joinDates.map(d => `<option value="${d}">${d}</option>`),
     ].join('');
 
-    /* --------------------------- 6. final HTML --------------------------- */
-    return /* html */`
+    /* --------------------------- final HTML --------------------------- */
+    return `
     <div id="user-board" class="project-section">
       <!-- header line with title & filter -->
       <div class="board-header">
