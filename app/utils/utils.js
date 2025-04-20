@@ -36,3 +36,19 @@ export function formatXP(amount, color = "") {
     amount = amount / 1000;
     return `<span class=${color}>${amount.toFixed(2)}</span> MB`;
 }
+
+// Pop up a fading notifation error.
+export function popError(message) {
+    const errorNotification = document.createElement('div');
+    errorNotification.className = "error-notification";
+    errorNotification.textContent = message;
+
+    document.body.appendChild(errorNotification);
+    setTimeout(() => {
+        errorNotification.style.opacity = '0';
+        errorNotification.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+            errorNotification.remove();
+        }, 500);
+    }, 4000);
+}

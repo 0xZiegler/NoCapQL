@@ -1,7 +1,8 @@
-import { hideShowPassword, removeError } from './utils/utils.js';
+import { hideShowPassword, removeError,popError } from './utils/utils.js';
 import { loginAPI, graphQLRequest } from './api.js';
 import { QUERIES } from './utils/query.js';
 import { bindUserBoardSort } from './utils/userBoardSort.js';
+import { apiError } from './api.js';
 
 // Components
 import { showLoading, hideLoading } from './components/loading.js';
@@ -51,11 +52,6 @@ export async function renderProfile() {
     showLoading();
 
     const userName = await graphQLRequest(QUERIES.USER_PROFILE, token);
-    if (!userName || !userName.data) {
-        localStorage.removeItem('JWT');
-        renderLogin();
-        return;
-    }
     const levelCard = await userLevel(token);
     const xpCard = await userXP(token);
     const projectList = await userProjects(token);
@@ -88,8 +84,9 @@ export async function renderProfile() {
     </div>
     `;
 
-    bindUserBoardSort(); 
-
+    bindUserBoardSort();
+    if (apiError) popError(apiError);
+    
     document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.removeItem('JWT');
         renderLogin();

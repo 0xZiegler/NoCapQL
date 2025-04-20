@@ -129,6 +129,24 @@ button#loginBtn {
     color: #d9534f;
 }
 
+.error-notification {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #dc2626;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: system-ui, sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    opacity: 1;
+    z-index: 9999;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+}
+
 /**********************************************************************************************
 *                                      Navbar styles
 ***********************************************************************************************/
@@ -313,7 +331,7 @@ button#loginBtn {
 @media (max-width: 460px) {
     .join-filter {
         margin-top: 5px;
-    } 
+    }
 }
 
 .project-level,
