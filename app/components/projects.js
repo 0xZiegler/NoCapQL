@@ -57,7 +57,7 @@ export async function userProjects(token) {
     /* wrap everything in the section container */
     return `
     <div class="project-section">
-      <p class="stat-title">Projects Done (${txs.length})</p>
+      <p class="stat-title">XP Milestones (${txs.length})</p>
       <ul class="project-list">${listHTML}</ul>
     </div>
   `;
