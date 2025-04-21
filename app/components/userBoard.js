@@ -27,8 +27,6 @@ export async function userBoard(token) {
 
             if (!extra[userLogin])
                 extra[userLogin] = { xp: 0, details: [] };
-
-            let i =0
             
             /* add XP once per project */
             if (!extra[userLogin].details.some(d => d.name === pname))
