@@ -220,7 +220,8 @@ button#loginBtn {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     color: #fff;
     text-align: center;
-    flex: 1 1 300px; /* Flex-grow, flex-shrink, and flex-basis */
+    flex: 1 1 300px;
+    /* Flex-grow, flex-shrink, and flex-basis */
     max-width: 600px;
 }
 
@@ -485,7 +486,8 @@ button#loginBtn {
         overflow-x: auto;
     }
 
-    .skill-bar-container, .skill-bar {
+    .skill-bar-container,
+    .skill-bar {
         min-width: 600px;
     }
 }
@@ -553,4 +555,124 @@ button#loginBtn {
     to {
         transform: rotate(360deg);
     }
+}
+
+/*********************************************** ProjectsModal Table **************************************/
+/**********************************************************************************************************/
+.ub-modal.ub-hidden {
+    display: none;
+}
+
+.ub-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    /* above your navbar (z‑index 999) */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ====== dark backdrop ====== */
+.ub-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+    backdrop-filter: blur(2px);
+}
+
+/* ====== dialog box ====== */
+.ub-box {
+    position: relative;
+    max-width: 800px;
+    margin: 10vh auto;
+    padding: 32px 28px 24px;
+    background: #0f172a;
+    color: #dbdbdb;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .35);
+}
+
+/* close button */
+.ub-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    border: none;
+    background: none;
+    font-size: 28px;
+    color: #94a3b8;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.ub-close:hover {
+    color: #fff;
+}
+
+/* title */
+.ub-title {
+    margin: 0 0 18px;
+    font-family: 'Zain', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    color: #8b5cf6;
+    text-align: center;
+}
+
+/* table */
+.ub-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.ub-table th,
+.ub-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #1e293b;
+    text-align: left;
+}
+
+.ub-table th {
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.ub-table td {
+    color: #e2e8f0;
+}
+
+.ub-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* clickable project counts (underline + pointer) */
+.project-count-click {
+    cursor: pointer;
+    color: greenyellow;
+}
+
+.project-count-click:hover {
+    color: #cbd5e1;
+}
+
+.ub-box {
+    max-height: 75vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.ub-scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 transparent;
+}
+
+.ub-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ub-scroll::-webkit-scrollbar-thumb {
+    background: #8b5cf6;
+    border-radius: 6px;
 }

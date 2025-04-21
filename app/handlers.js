@@ -9,7 +9,7 @@ import { showLoading, hideLoading } from './components/loading.js';
 import { userLevel } from './components/level.js';
 import { userXP } from './components/xp.js';
 import { userProjects } from './components/projects.js';
-import { userBoard } from './components/userBoard.js';
+import { userBoard, bindProjectsModal } from './components/userBoard.js';
 import { userSkills } from './components/svg/skills.js';
 import { userAudits } from './components/svg/audits.js';
 
@@ -85,6 +85,7 @@ export async function renderProfile() {
     `;
 
     bindUserBoardSort();
+    bindProjectsModal();
     if (apiError) popError(apiError);
     
     document.getElementById('logoutBtn').addEventListener('click', () => {

@@ -76,7 +76,7 @@ export const QUERIES = {
         }
     }`,
 
-    FINISHED_MODULE_GROUPS: `{
+    GROUPS: `{
         group(
             where: {
                 status: { _eq: finished }
@@ -85,7 +85,8 @@ export const QUERIES = {
         ){
             members {
                 userLogin
-                path         
+                path
+                createdAt         
             }
         }
     }`,
