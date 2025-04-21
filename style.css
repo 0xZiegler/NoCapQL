@@ -172,7 +172,6 @@ button#loginBtn {
 
 .navbar-left strong {
     color: #8b5cf6;
-
 }
 
 .navbar-right button {
@@ -201,18 +200,6 @@ button#loginBtn {
     }
 }
 
-@media (max-width: 400px) {
-    .stat-grid {
-        margin-left: 10px !important;
-        margin-right: 10px !important;
-    }
-
-    .project-section {
-        margin-left: 10px !important;
-        margin-right: 10px !important;
-    }
-}
-
 /********************************** Level and XP styles ***************************************/
 /**********************************************************************************************/
 .stat-grid {
@@ -220,7 +207,7 @@ button#loginBtn {
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
-    margin-top: 60px;
+    margin-top: 50px;
     margin-left: 25px;
     margin-right: 25px;
 }
@@ -233,14 +220,9 @@ button#loginBtn {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     color: #fff;
     text-align: center;
-    flex: 1 1 300px;
+    flex: 1 1 300px; /* Flex-grow, flex-shrink, and flex-basis */
     max-width: 600px;
 }
-
-/* .stat-card:hover {
-    background: #070f1b;
-    transition: background 0.3s ease;
-} */
 
 .stat-title {
     font-size: 30px;
@@ -276,6 +258,18 @@ button#loginBtn {
 
 .amountPurple {
     color: #9266f8;
+}
+
+@media (max-width: 400px) {
+    .stat-grid {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+    }
+
+    .project-section {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+    }
 }
 
 /***************************************** Project List styles *********************************/
@@ -389,7 +383,7 @@ button#loginBtn {
 }
 
 .project-name {
-    flex: 1;
+    flex: 0.7;
     text-align: left;
 }
 
@@ -407,7 +401,7 @@ button#loginBtn {
 }
 
 .project-members {
-    flex: 1;
+    flex: 0.7;
     text-align: right;
     color: #a78bfa;
     font-size: 13px;
@@ -429,33 +423,12 @@ button#loginBtn {
     .project-list {
         display: block;
     }
-
-    .project-item>span {
-        flex-shrink: 0;
-        /* don't collapse on narrow screens */
-        white-space: nowrap;
-        /* keep a single line              */
-    }
-
-    .project-item {
-        display: flex;
-        gap: 15px;
-    }
-
-    .project-name,
-    .project-xp,
-    .project-date,
-    .project-members {
-        overflow: visible;
-        text-overflow: initial;
-    }
 }
 
 /************************************ USERBOARD STYLES *****************************************/
 /***********************************************************************************************/
 .inactive-user {
     color: #f87171;
-    /* red text for can't access users */
 }
 
 .project-rank {
@@ -512,13 +485,8 @@ button#loginBtn {
         overflow-x: auto;
     }
 
-    .skill-bar-container {
+    .skill-bar-container, .skill-bar {
         min-width: 600px;
-    }
-
-    .skill-bar {
-        min-width: 600px;
-        white-space: nowrap;
     }
 }
 

@@ -1,12 +1,11 @@
-import { hideLoading } from "./components/loading.js";
 import { renderProfile } from "./handlers.js";
 import { displayError, popError } from "./utils/utils.js";
 
+export let apiError = ""
 export const API = {
     DATA_ENDPOINT: 'https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql',
     SIGNIN_ENDPOINT: 'https://learn.zone01oujda.ma/api/auth/signin'
 };
-export let apiError = ""
 
 // Set up the login form and handle submission request
 export async function loginAPI() {

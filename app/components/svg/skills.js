@@ -1,5 +1,6 @@
-import { graphQLRequest } from '../../api.js';
+import { capitalize } from '../../utils/utils.js';
 import { QUERIES } from '../../utils/query.js';
+import { graphQLRequest } from '../../api.js';
 
 export async function userSkills(token) {
     const result = await graphQLRequest(QUERIES.USER_SKILLS, token);
@@ -68,8 +69,4 @@ function getSkillColor(skill) {
 
     const key = skill.split("-")[0]; // "front-end" → "front"
     return colors[key] || colors.default;
-}
-
-function capitalize(text) {
-    return text.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase());
 }

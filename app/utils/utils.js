@@ -37,6 +37,14 @@ export function formatXP(amount, color = "") {
     return `<span class=${color}>${amount.toFixed(2)}</span> MB`;
 }
 
+// Capitalize the first letter of each word in a string
+export function capitalize(text) {
+    return text
+        .toLowerCase()
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, l => l.toUpperCase());
+}
+
 // Pop up a fading notifation error.
 export function popError(message) {
     const errorNotification = document.createElement('div');

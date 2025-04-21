@@ -1,4 +1,4 @@
-import { hideShowPassword, removeError,popError } from './utils/utils.js';
+import { hideShowPassword, removeError, popError, capitalize } from './utils/utils.js';
 import { loginAPI, graphQLRequest } from './api.js';
 import { QUERIES } from './utils/query.js';
 import { bindUserBoardSort } from './utils/userBoardSort.js';
@@ -66,7 +66,7 @@ export async function renderProfile() {
     document.body.innerHTML = `
     <div class="navbar">
         <div class="navbar-left">
-            <span>Hello, <strong>${firstName} ${lastName}</strong></span>
+            <span>Hello, <strong>${capitalize(`${firstName} ${lastName}`)}</strong></span>
         </div>
         <div class="navbar-right">
             <button id="logoutBtn">Logout</button>

@@ -19,7 +19,7 @@ export async function userBoard(token) {
 
     for (const { members } of groups) {
         for (const { userLogin, path } of members) {
-            if (path.startsWith('/oujda/module/piscine')) continue;       // skip piscine‑projects
+            if (path.startsWith('/oujda/module/piscine')) continue; // skip piscine‑projects
             const pname = path.split('/oujda/module/')[1] || '';
             if (!pname) continue;
 
@@ -31,10 +31,10 @@ export async function userBoard(token) {
         }
     }
 
-    /* --------------------------- merge core + extra stats --------------------------- */
+    /* ----------------------- merge core stats with extras ---------------------- */
     const data = users
         .map(u => {
-            const ev = u.events_aggregate?.nodes?.[0];
+            const ev = u.events?.[0];
             if (!ev || !ev.userAuditRatio) return null;
 
             const ex = extra[u.login] ?? { xp: 0, projects: new Set() };
@@ -43,19 +43,19 @@ export async function userBoard(token) {
                 login: u.login,
                 canAccess: u.canAccessPlatform,
                 level: ev.level ?? 0,
-                audit: +ev.userAuditRatio,
-                joined: new Date(ev.createdAt).toLocaleDateString(),   // "12/22/2024"
+                audit: ev.userAuditRatio,
+                joined: new Date(ev.createdAt).toLocaleDateString(), // "12/22/2024"
                 name: ev.userName ?? 'Unknown',
                 xpNum: ex.xp,
                 xpStr: formatXP(ex.xp),
                 projCount: ex.projects.size,
             };
         })
-        .filter(Boolean)
-        .sort((a, b) => b.xpNum - a.xpNum);        // default order = XP ↓
+        .filter(Boolean) // filter(item => item != null/undefined/false)
+        .sort((a, b) => b.xpNum - a.xpNum); // default order = XP ↓
 
-    /* --------------------------- build <li> helper --------------------------- */
-    const rowHTML = (u, idx) => /* html */`
+    /* --------------------------- build <li> --------------------------- */
+    const rowHTML = (u, idx) => `
     <li class="project-item ${u.canAccess ? '' : 'inactive-user'}"
         data-name="${u.name.toLowerCase()}"
         data-level="${u.level}"
@@ -74,9 +74,9 @@ export async function userBoard(token) {
       <span class="project-joined">${u.joined}</span>
     </li>`;
 
-    /* --------------------------- create Drop‑down options (unique join‑dates) --------------------------- */
-    const joinDates = [...new Set(data.map(u => u.joined))]           // unique
-        .sort((a, b) => new Date(a) - new Date(b));   // asc
+    /* --------------------- create join‑date filter --------------------- */
+    const joinDates = [...new Set(data.map(u => u.joined))]   // unique
+        .sort((a, b) => new Date(a) - new Date(b));           // ascending
 
     const optionsHTML = [
         '<option value="all">All</option>',
@@ -89,7 +89,6 @@ export async function userBoard(token) {
       <!-- header line with title & filter -->
       <div class="board-header">
         <p class="stat-title">Talents Leaderboard (${data.length})</p>
-
         <select id="join-filter" class="join-filter">
           ${optionsHTML}
         </select>

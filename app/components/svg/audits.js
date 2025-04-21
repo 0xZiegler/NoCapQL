@@ -17,15 +17,14 @@ export async function userAudits(token) {
     // Calculate stroke lengths for circle chart
     const r = 70;
     const c = 2 * Math.PI * r;
-    const successOffset = 0;
-    const failedOffset = (c * successPercent) / 100;
+    const sucessC = (c * successPercent) / 100;
+    const failC = (c * failedPercent) / 100;
 
     return `
     <div class="project-section audit-chart-section">
       <p class="stat-title">Audit Results</p>
       <div class="audit-chart-wrapper">
         <svg width="180" height="180" viewBox="0 0 180 180">
-          <circle r="${r}" cx="90" cy="90" fill="transparent" stroke="#e5e7eb" stroke-width="30" />
           <circle
             r="${r}"
             cx="90"
@@ -33,9 +32,7 @@ export async function userAudits(token) {
             fill="transparent"
             stroke="#22c55e"
             stroke-width="30"
-            stroke-dasharray="${(c * successPercent) / 100} ${c}"
-            stroke-dashoffset="${successOffset}"
-            transform="rotate(-90 90 90)"
+            stroke-dasharray="${sucessC} ${c}"
           />
           <circle
             r="${r}"
@@ -44,9 +41,8 @@ export async function userAudits(token) {
             fill="transparent"
             stroke="#ef4444"
             stroke-width="30"
-            stroke-dasharray="${(c * failedPercent) / 100} ${c}"
-            stroke-dashoffset="${-failedOffset}"
-            transform="rotate(-90 90 90)"
+            stroke-dasharray="${failC} ${c}"
+            stroke-dashoffset="${-sucessC}"
           />
           <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-size="20px">
             ${total} Audits

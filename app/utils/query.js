@@ -63,18 +63,16 @@ export const QUERIES = {
         user_public_view {
             login
             canAccessPlatform
-            events_aggregate(
+            events(
             where: {
                 event: { path: { _eq: "/oujda/module" } }
             }
         ) {
-            nodes {
                 level
                 userAuditRatio
                 createdAt
                 userName
             }
-        }
         }
     }`,
 

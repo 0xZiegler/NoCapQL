@@ -24,10 +24,10 @@ export function bindUserBoardSort() {
         order[key] = order[key] === 'asc' ? 'desc' : 'asc';
         const dir = order[key] === 'asc' ? 1 : -1;
 
-        rows.sort((a, b) => {
+        rows.sort((a, b) => { // -1 -> put a before b / 1 -> put b before a
             const A = a.dataset[key];
             const B = b.dataset[key];
-            const av = isNaN(+A) ? A : +A;
+            const av = isNaN(+A) ? A : +A; // "+" convert string to number
             const bv = isNaN(+B) ? B : +B;
             return av < bv ? -dir : av > bv ? dir : 0;
         });
