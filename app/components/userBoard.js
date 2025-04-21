@@ -28,9 +28,16 @@ export async function userBoard(token) {
             if (!extra[userLogin])
                 extra[userLogin] = { xp: 0, details: [] };
 
+            let i =0
+            
             /* add XP once per project */
             if (!extra[userLogin].details.some(d => d.name === pname))
                 extra[userLogin].xp += PROJECTS_XP[pname] ?? 0;
+
+            if (userLogin == "aammar") {
+                console.log(i, pname, PROJECTS_XP[pname]);
+                i++
+            }
 
             /* unified date handling (timestamp + display string) */
             const ts = createdAt ? Date.parse(createdAt) : 0;
@@ -50,7 +57,7 @@ export async function userBoard(token) {
     /* merge core stats */
     const data = users
         .map(u => {
-            const ev = u.events?.[0];                 // your API shape
+            const ev = u.events?.[0];
             if (!ev || !ev.userAuditRatio) return null;
 
             const ex = extra[u.login] ?? { xp: 0, details: [] };
