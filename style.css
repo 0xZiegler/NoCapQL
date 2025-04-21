@@ -649,6 +649,7 @@ button#loginBtn {
 .project-count-click {
     cursor: pointer;
     color: greenyellow;
+    text-decoration: underline;
 }
 
 .project-count-click:hover {

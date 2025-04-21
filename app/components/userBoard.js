@@ -32,6 +32,10 @@ export async function userBoard(token) {
             if (!extra[userLogin].details.some(d => d.name === pname))
                 extra[userLogin].xp += PROJECTS_XP[pname] ?? 0;
 
+            if (!PROJECTS_XP[pname]) {
+                console.log(pname);
+            }
+
             /* unified date handling (timestamp + display string) */
             const ts = createdAt ? Date.parse(createdAt) : 0;
             const dStr = ts
