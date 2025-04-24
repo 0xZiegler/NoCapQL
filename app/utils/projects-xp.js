@@ -69,6 +69,7 @@ export const PROJECTS_XP = {
     "mini-framework": 145000,
     "mister-quiz": 75300,
     "mouse-vr": 452000,
+    "moderation": 19100,
     "mr-jenk": 113000,
     "multiplayer-fps": 1680000,
     "my-ls-1": 12300,
