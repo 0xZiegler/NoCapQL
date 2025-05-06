@@ -1,4 +1,4 @@
-import { hideShowPassword, removeError, popError, capitalize } from './utils/utils.js';
+import { hideShowPassword, removeError, capitalize } from './utils/utils.js';
 import { loginAPI, graphQLRequest } from './api.js';
 import { QUERIES } from './utils/query.js';
 import { bindUserBoardSort } from './utils/userBoardSort.js';
@@ -86,7 +86,10 @@ export async function renderProfile() {
 
     bindUserBoardSort();
     bindProjectsModal();
-    if (apiError) popError(apiError);
+    if (apiError) {
+        localStorage.removeItem('JWT');
+        renderLogin();
+    };
     
     document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.removeItem('JWT');
