@@ -1,7 +1,6 @@
 import { renderProfile } from "./handlers.js";
-import { displayError, popError } from "./utils/utils.js";
+import { displayError } from "./utils/utils.js";
 
-export let apiError = ""
 export const API = {
     DATA_ENDPOINT: 'https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql',
     SIGNIN_ENDPOINT: 'https://learn.zone01oujda.ma/api/auth/signin'
@@ -64,6 +63,7 @@ export const graphQLRequest = async (query, token) => {
         return result;
     } catch (error) {
         console.error("GraphQL request failed:", error);
-        apiError = "Failed to fetch some data. Please try again.";
+        localStorage.removeItem('JWT');
+        renderLogin();
     }
 };
