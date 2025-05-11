@@ -27,7 +27,7 @@ export async function userBoard(token) {
 
             if (!extra[userLogin])
                 extra[userLogin] = { xp: 0, details: [] };
-            
+
             /* add XP once per project */
             if (!extra[userLogin].details.some(d => d.name === pname))
                 extra[userLogin].xp += PROJECTS_XP[pname] ?? 0;
@@ -107,7 +107,9 @@ export async function userBoard(token) {
       ${u.projCount}
     </span>
 
-    <span class="project-members">${u.login}</span>
+    <span class="project-members">
+        <a href="https://learn.zone01oujda.ma/git/${u.login}" target="_blank" rel="noopener noreferrer">${u.login}</a>
+    </span>
     <span class="project-joined">${u.joined}</span>
   </li>`;
 

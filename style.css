@@ -677,3 +677,13 @@ button#loginBtn {
     background: #8b5cf6;
     border-radius: 6px;
 }
+
+.project-members a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.project-members a:hover {
+    color: #00cc6d;
+}
