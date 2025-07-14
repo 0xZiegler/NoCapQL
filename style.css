@@ -687,3 +687,11 @@ button#loginBtn {
 .project-members a:hover {
     color: #00cc6d;
 }
+
+.team-link {
+    color: #ffffff;
+}
+
+.team-link:hover {
+    color: #00cc6d;
+}

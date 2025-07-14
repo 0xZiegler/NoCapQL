@@ -1,5 +1,5 @@
 export const PROJECTS_XP = {
-    "0-shell": 696000,
+    "0-shell": 1086000,
     "a-table": 201000,
     "active": 180000,
     "add-vm": 250000,

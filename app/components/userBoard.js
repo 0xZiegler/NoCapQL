@@ -5,88 +5,88 @@ import { QUERIES } from '../utils/query.js';
 
 /* ---------- public builder ---------- */
 export async function userBoard(token) {
-    /* fetch data */
-    const [userRes, groupRes] = await Promise.all([
-        graphQLRequest(QUERIES.USERBOARD, token),
-        graphQLRequest(QUERIES.GROUPS, token),
-    ]);
+  /* fetch data */
+  const [userRes, groupRes] = await Promise.all([
+    graphQLRequest(QUERIES.USERBOARD, token),
+    graphQLRequest(QUERIES.GROUPS, token),
+  ]);
 
-    const users = userRes?.data?.user_public_view ?? [];
-    const groups = groupRes?.data?.group ?? [];
+  const users = userRes?.data?.user_public_view ?? [];
+  const groups = groupRes?.data?.group ?? [];
 
-    /* aggregate project info */
-    const extra = Object.create(null);          // { login -> { xp, details[] } }
+  /* aggregate project info */
+  const extra = Object.create(null);          // { login -> { xp, details[] } }
 
-    for (const { members } of groups) {
-        const team = members.map(m => m.userLogin);   // teammates for current project
+  for (const { members } of groups) {
+    const team = members.map(m => m.userLogin);   // teammates for current project
 
-        for (const { userLogin, path, createdAt } of members) {
-            if (path.startsWith('/oujda/module/piscine')) continue;
-            const pname = path.split('/oujda/module/')[1] || '';
-            if (!pname) continue;
+    for (const { userLogin, path, createdAt } of members) {
+      if (path.startsWith('/oujda/module/piscine')) continue;
+      const pname = path.split('/oujda/module/')[1] || '';
+      if (!pname) continue;
 
-            if (!extra[userLogin])
-                extra[userLogin] = { xp: 0, details: [] };
+      if (!extra[userLogin])
+        extra[userLogin] = { xp: 0, details: [] };
 
-            /* add XP once per project */
-            if (!extra[userLogin].details.some(d => d.name === pname))
-                extra[userLogin].xp += PROJECTS_XP[pname] ?? 0;
+      /* add XP once per project */
+      if (!extra[userLogin].details.some(d => d.name === pname))
+        extra[userLogin].xp += PROJECTS_XP[pname] ?? 0;
 
-            if (!PROJECTS_XP[pname]) {
-                console.log(pname);
-            }
+      if (!PROJECTS_XP[pname]) {
+        console.log(pname);
+      }
 
-            /* unified date handling (timestamp + display string) */
-            const ts = createdAt ? Date.parse(createdAt) : 0;
-            const dStr = ts
-                ? new Date(ts).toLocaleDateString()
-                : '—';
+      /* unified date handling (timestamp + display string) */
+      const ts = createdAt ? Date.parse(createdAt) : 0;
+      const dStr = ts
+        ? new Date(ts).toLocaleDateString()
+        : '—';
 
-            extra[userLogin].details.push({
-                name: pname,
-                dateNum: ts,
-                dateStr: dStr,
-                team: team.join(', ')
-            });
-        }
+      extra[userLogin].details.push({
+        name: pname,
+        dateNum: ts,
+        dateStr: dStr,
+        team: team.join(', ')
+      });
     }
+  }
 
-    /* merge core stats */
-    const data = users
-        .map(u => {
-            const ev = u.events?.[0];
-            if (!ev || !ev.userAuditRatio) return null;
+  /* merge core stats */
+  const data = users
+    .map(u => {
+      const ev = u.events?.[0];
+      if (!ev || !ev.userAuditRatio) return null;
 
-            const ex = extra[u.login] ?? { xp: 0, details: [] };
+      const ex = extra[u.login] ?? { xp: 0, details: [] };
 
-            return {
-                login: u.login,
-                canAccess: u.canAccessPlatform,
-                level: ev.level ?? 0,
-                audit: ev.userAuditRatio,
-                joined: new Date(ev.createdAt)
-                    .toLocaleDateString(),
-                name: ev.userName ?? 'Unknown',
-                xpNum: ex.xp,
-                xpStr: formatXP(ex.xp),
-                projCount: ex.details.length,
-                projects: ex.details
-            };
-        })
-        .filter(Boolean)
-        .sort((a, b) => b.xpNum - a.xpNum);      // XP ↓
+      return {
+        login: u.login,
+        canAccess: u.canAccessPlatform,
+        level: ev.level ?? 0,
+        audit: ev.userAuditRatio,
+        joined: new Date(ev.createdAt)
+          .toLocaleDateString(),
+        name: ev.userName ?? 'Unknown',
+        xpNum: ex.xp,
+        xpStr: formatXP(ex.xp),
+        projCount: ex.details.length,
+        projects: ex.details
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.xpNum - a.xpNum);      // XP ↓
 
-    /* join‑date filter */
-    const joinDates = [...new Set(data.map(u => u.joined))]
-        .sort((a, b) => new Date(a) - new Date(b));
+  /* join‑date filter */
+  const joinDates = [...new Set(data.map(u => u.joined))]
+    .sort((a, b) => new Date(a) - new Date(b));
 
-    const joinSelect = [
-        '<option value="all">All</option>',
-        ...joinDates.map(d => `<option value="${d}">${d}</option>`),
-    ].join('');
+  const joinSelect = [
+    '<option value="all">All</option>',
+    ...joinDates.map(d => `<option value="${d}">${d}</option>`),
+  ].join('');
 
-    /* row factory */
-    const rowHTML = (u, idx) => `
+  /* row factory */
+  const rowHTML = (u, idx) => `
     <li class="project-item ${u.canAccess ? '' : 'inactive-user'}"
       data-name="${u.name.toLowerCase()}"
       data-level="${u.level}"
@@ -108,13 +108,13 @@ export async function userBoard(token) {
     </span>
 
     <span class="project-members">
-        <a href="https://learn.zone01oujda.ma/git/${u.login}" target="_blank" rel="noopener noreferrer">${u.login}</a>
+        <a href="https://profile.zone01oujda.ma/profile/${u.login}" target="_blank" rel="noopener noreferrer">${u.login}</a>
     </span>
     <span class="project-joined">${u.joined}</span>
   </li>`;
 
-    /* full HTML (modal skeleton included) */
-    return `
+  /* full HTML (modal skeleton included) */
+  return `
     <div id="user-board" class="project-section">
     <div class="board-header">
       <p class="stat-title">Talents Leaderboard (${data.length})</p>
@@ -162,32 +162,41 @@ export async function userBoard(token) {
 
 /* ---------- activate modal clicks ---------- */
 export function bindProjectsModal() {
-    const board = document.getElementById('board-body');
-    const modal = document.getElementById('proj-modal');
-    const tbody = modal.querySelector('tbody');
-    const close = modal.querySelector('.ub-close');
-    const back = modal.querySelector('.ub-backdrop');
+  const board = document.getElementById('board-body');
+  const modal = document.getElementById('proj-modal');
+  const tbody = modal.querySelector('tbody');
+  const close = modal.querySelector('.ub-close');
+  const back = modal.querySelector('.ub-backdrop');
 
-    const hide = () => modal.classList.add('ub-hidden');
-    close.addEventListener('click', hide);
-    back.addEventListener('click', hide);
+  const hide = () => modal.classList.add('ub-hidden');
+  close.addEventListener('click', hide);
+  back.addEventListener('click', hide);
 
-    board.addEventListener('click', e => {
-        const el = e.target;
-        if (!el.classList.contains('project-count-click')) return;
+  board.addEventListener('click', e => {
+    const el = e.target;
+    if (!el.classList.contains('project-count-click')) return;
 
-        /* decode + sort by newest first */
-        const projects = JSON.parse(decodeURIComponent(el.dataset.projects))
-            .sort((a, b) => b.dateNum - a.dateNum);
+    /* decode + sort by newest first */
+    const projects = JSON.parse(decodeURIComponent(el.dataset.projects))
+      .sort((a, b) => b.dateNum - a.dateNum);
 
-        tbody.innerHTML = projects.map(p => `
+    tbody.innerHTML = projects.map(p => {
+      const teamLinks = p.team
+        .split(/,\s*/)
+        .map(u =>
+          `<a class="team-link" href="https://profile.zone01oujda.ma/profile/${u}"
+              target="_blank" rel="noopener noreferrer">${u}</a>`
+        )
+        .join(', ');
+
+      return `
         <tr>
-            <td>${p.name}</td>
-            <td>${p.dateStr}</td>
-            <td>${p.team}</td>
-        </tr>
-        `).join('');
+          <td>${p.name}</td>
+          <td>${p.dateStr}</td>
+          <td>${teamLinks}</td>
+        </tr>`;
+    }).join('');
 
-        modal.classList.remove('ub-hidden');
-    });
+    modal.classList.remove('ub-hidden');
+  });
 }
