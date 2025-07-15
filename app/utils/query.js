@@ -86,8 +86,10 @@ export const QUERIES = {
             members {
                 userLogin
                 path
-                createdAt         
+                updatedAt  
+                createdAt    
             }
+            captainLogin
         }
     }`,
 

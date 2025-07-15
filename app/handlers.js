@@ -9,6 +9,8 @@ import { userLevel } from './components/level.js';
 import { userXP } from './components/xp.js';
 import { userProjects } from './components/projects.js';
 import { userBoard, bindProjectsModal } from './components/userBoard.js';
+import { projectsProgress, bindProjectsProgress } from './components/projectsProgress.js';
+import { openAuditors, bindOpenAuditors } from './components/openAuditors.js';
 import { userSkills } from './components/svg/skills.js';
 import { userAudits } from './components/svg/audits.js';
 
@@ -50,13 +52,25 @@ export async function renderProfile() {
 
     showLoading();
 
+    // fetch USERBOARD + GROUPS
+    const [userRes, groupRes] = await Promise.all([
+        graphQLRequest(QUERIES.USERBOARD, token),
+        graphQLRequest(QUERIES.GROUPS, token)
+    ]);
+    const sharedData = {
+        users: userRes?.data?.user_public_view ?? [],
+        groups: groupRes?.data?.group ?? []
+    };
+
     const userName = await graphQLRequest(QUERIES.USER_PROFILE, token);
     const levelCard = await userLevel(token);
     const xpCard = await userXP(token);
     const projectList = await userProjects(token);
-    const boardList = await userBoard(token);
+    const boardList = await userBoard(sharedData);
     const skillBars = await userSkills(token);
     const auditChart = await userAudits(token);
+    const progressBox = await projectsProgress(sharedData);
+    const auditorsBox = openAuditors();
 
     const { firstName = '', lastName = '' } = userName?.data?.user?.[0] || {};
 
@@ -78,6 +92,10 @@ export async function renderProfile() {
         </div>
         ${projectList}
         ${boardList}
+        <div class="stat-grid">
+            ${progressBox}
+            ${auditorsBox}
+        </div>
         ${skillBars}
         ${auditChart}
     </div>
@@ -85,7 +103,9 @@ export async function renderProfile() {
 
     bindUserBoardSort();
     bindProjectsModal();
-    
+    bindProjectsProgress();
+    bindOpenAuditors();
+
     document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.removeItem('JWT');
         renderLogin();

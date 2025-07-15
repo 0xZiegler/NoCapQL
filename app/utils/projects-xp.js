@@ -1,4 +1,6 @@
 export const PROJECTS_XP = {
+    "go-reloaded": 5000,
+    "ascii-art": 6130,
     "0-shell": 1086000,
     "a-table": 201000,
     "active": 180000,
@@ -6,7 +8,6 @@ export const PROJECTS_XP = {
     "advanced-features": 19100,
     "angul-it": 105000,
     "army-of-one": 409000,
-    "ascii-art": 6130,
     "ascii-art-web": 9200,
     "atm-management-system": 75300,
     "authentication": 19100,
@@ -37,7 +38,6 @@ export const PROJECTS_XP = {
     "geolocalization": 12300,
     "get-a-room": 70000,
     "git": 5000,
-    "go-reloaded": 5000,
     "graphql": 100000,
     "groupie-tracker": 24500,
     "guess-it-1": 5000,

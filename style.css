@@ -16,6 +16,10 @@ body {
     /*background: #2e4170;*/
 }
 
+body.modal-lock {
+    overflow: hidden;
+}
+
 .login-container {
     position: absolute;
     width: 95%;
@@ -223,6 +227,11 @@ button#loginBtn {
     flex: 1 1 300px;
     /* Flex-grow, flex-shrink, and flex-basis */
     max-width: 600px;
+    max-height: 700px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 transparent;
 }
 
 .stat-title {
@@ -286,7 +295,7 @@ button#loginBtn {
     color: #fff;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     max-width: 1230px;
-    max-height: 400px;
+    max-height: 550px;
     overflow-y: auto;
     scroll-behavior: smooth;
     scrollbar-width: thin;
@@ -688,10 +697,141 @@ button#loginBtn {
     color: #00cc6d;
 }
 
-.team-link {
+.team-link,
+td a {
     color: #ffffff;
 }
 
-.team-link:hover {
+.team-link:hover,
+td a:hover {
     color: #00cc6d;
 }
+
+/* ===== Projects Progress (grid card) ===== */
+.pp-list {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    font-size: 14px;
+}
+
+.pp-item {
+    display: grid;
+    grid-template-columns: 1fr 80px 80px;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid #1e293b;
+}
+
+.pp-header {
+    font-weight: 600;
+    color: #94a3b8;
+    border-bottom: 2px solid #1e293b;
+}
+
+.pp-name {
+    color: #e2e8f0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pp-teams {
+    text-align: center;
+    color: #38bdf8;
+}
+
+.pp-count {
+    text-align: right;
+    color: #22c55e;
+    cursor: pointer;
+}
+
+/* dropdown filter */
+.dd-wrap {
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.dd-btn {
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #8b5cf6;
+    border-radius: 6px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-family: 'Zain', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.dd-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: none;
+    z-index: 50;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
+}
+
+.dd-menu.open {
+    display: block;
+}
+
+.dd-option {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #e2e8f0;
+}
+
+.dd-option:last-child {
+    margin: 0;
+}
+
+.dd-option input {
+    margin-right: 6px;
+    accent-color: #8b5cf6;
+}
+
+#open-auditors textarea {
+    width: 100%;
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #8b5cf6;
+    border-radius: 8px;
+    padding: 10px 12px;
+    resize: none;
+    font-family: monospace;
+    margin-top: 14px;
+    height: 450px;
+}
+
+.aud-open-btn {
+    margin-top: 14px;
+    background: #8b5cf6;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 24px;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Zain', sans-serif;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.aud-open-btn:hover {
+    background: #a78bfa;
+}
+
+#open-auditors textarea:focus {
+    outline: none;                     
+    border: 1px solid #8b5cf6;
+    background: #1e293b;                
+    color: #e2e8f0;
+  }

@@ -1,26 +1,21 @@
 import { PROJECTS_XP } from '../utils/projects-xp.js';
 import { formatXP } from '../utils/utils.js';
-import { graphQLRequest } from '../api.js';
-import { QUERIES } from '../utils/query.js';
 
 /* ---------- public builder ---------- */
-export async function userBoard(token) {
-  /* fetch data */
-  const [userRes, groupRes] = await Promise.all([
-    graphQLRequest(QUERIES.USERBOARD, token),
-    graphQLRequest(QUERIES.GROUPS, token),
-  ]);
-
-  const users = userRes?.data?.user_public_view ?? [];
-  const groups = groupRes?.data?.group ?? [];
+export function userBoard({ users, groups }) {
 
   /* aggregate project info */
   const extra = Object.create(null);          // { login -> { xp, details[] } }
 
-  for (const { members } of groups) {
-    const team = members.map(m => m.userLogin);   // teammates for current project
+  for (const { members, captainLogin } of groups) {
+    const teamStr = [
+      captainLogin,
+      ...members                         // [{ userLogin, … }]
+        .map(m => m.userLogin)
+        .filter(u => u !== captainLogin) // drop duplicate captain
+    ].join(', ');   // teammates for current project
 
-    for (const { userLogin, path, createdAt } of members) {
+    for (const { userLogin, path, updatedAt, createdAt } of members) {
       if (path.startsWith('/oujda/module/piscine')) continue;
       const pname = path.split('/oujda/module/')[1] || '';
       if (!pname) continue;
@@ -33,20 +28,25 @@ export async function userBoard(token) {
         extra[userLogin].xp += PROJECTS_XP[pname] ?? 0;
 
       if (!PROJECTS_XP[pname]) {
-        console.log(pname);
+        console.log(pname); // log projects that doesn't exit in my list, to be added
       }
 
       /* unified date handling (timestamp + display string) */
-      const ts = createdAt ? Date.parse(createdAt) : 0;
-      const dStr = ts
-        ? new Date(ts).toLocaleDateString()
-        : '—';
+      const why_date = '2024-10-29';                 // ignore this updatedAt
+      const rawDate =
+        updatedAt && !updatedAt.startsWith(why_date) // use updatedAt unless it's idk why that date appear in updatedAt
+          ? updatedAt
+          : createdAt;
+
+      const ts = rawDate ? Date.parse(rawDate) : 0;
+      const dStr = ts ? new Date(ts).toLocaleDateString() : '—';
 
       extra[userLogin].details.push({
         name: pname,
         dateNum: ts,
         dateStr: dStr,
-        team: team.join(', ')
+        team: teamStr,
+        captain: captainLogin
       });
     }
   }
@@ -165,13 +165,23 @@ export function bindProjectsModal() {
   const board = document.getElementById('board-body');
   const modal = document.getElementById('proj-modal');
   const tbody = modal.querySelector('tbody');
-  const close = modal.querySelector('.ub-close');
-  const back = modal.querySelector('.ub-backdrop');
 
-  const hide = () => modal.classList.add('ub-hidden');
-  close.addEventListener('click', hide);
-  back.addEventListener('click', hide);
+  /* helpers */
+  const open = () => {
+    modal.classList.remove('ub-hidden');
+    document.body.classList.add('modal-lock');   // lock background scroll
+  };
 
+  const hide = () => {
+    modal.classList.add('ub-hidden');
+    document.body.classList.remove('modal-lock'); // unlock background scroll
+  };
+
+  /* close buttons */
+  modal.querySelector('.ub-close').addEventListener('click', hide);
+  modal.querySelector('.ub-backdrop').addEventListener('click', hide);
+
+  /* board click → open modal */
   board.addEventListener('click', e => {
     const el = e.target;
     if (!el.classList.contains('project-count-click')) return;
@@ -197,6 +207,6 @@ export function bindProjectsModal() {
         </tr>`;
     }).join('');
 
-    modal.classList.remove('ub-hidden');
+    open();
   });
 }
