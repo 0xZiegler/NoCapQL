@@ -29,6 +29,7 @@ export function projectsProgress({ users, groups }) {
 
     for (const g of groups) {
         const { members, captainLogin } = g;
+
         /* unique ID for this team (captain or member‑hash) */
         const teamKey = captainLogin ||
             JSON.stringify(members.map(m => m.userLogin).sort());
@@ -48,11 +49,14 @@ export function projectsProgress({ users, groups }) {
             const cohort = cohortByLogin[userLogin] ?? 0;
 
             if (!projectsMap[pname])
-                projectsMap[pname] = { participants: [], teamIds: new Set() };
+                projectsMap[pname] = { byLogin: Object.create(null), teamIds: new Set() };
 
-            projectsMap[pname].participants.push(
-                { login: userLogin, dateNum: ts, dateStr: dStr, cohort, team: teamKey }
-            );
+            const prev = projectsMap[pname].byLogin[userLogin];
+            /* keep only the newest record for this login */
+            if (!prev || ts > prev.dateNum) {
+                projectsMap[pname].byLogin[userLogin] =
+                    { login: userLogin, dateNum: ts, dateStr: dStr, cohort, team: teamKey };
+            }
             projectsMap[pname].teamIds.add(teamKey);
         }
     }
@@ -60,7 +64,7 @@ export function projectsProgress({ users, groups }) {
     /* map → array with derived props */
     const projects = Object.entries(projectsMap).map(([name, info]) => ({
         name,
-        participants: info.participants,
+        participants: Object.values(info.byLogin),
         teams: info.teamIds.size
     }));
 
