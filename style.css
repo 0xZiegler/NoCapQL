@@ -228,10 +228,6 @@ button#loginBtn {
     /* Flex-grow, flex-shrink, and flex-basis */
     max-width: 600px;
     max-height: 700px;
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-    scrollbar-width: thin;
-    scrollbar-color: #8b5cf6 transparent;
 }
 
 .stat-title {
@@ -830,8 +826,15 @@ td a:hover {
 }
 
 #open-auditors textarea:focus {
-    outline: none;                     
+    outline: none;
     border: 1px solid #8b5cf6;
-    background: #1e293b;                
+    background: #1e293b;
     color: #e2e8f0;
-  }
+}
+
+#projects-progress {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 transparent;
+}
