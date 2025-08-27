@@ -53,28 +53,33 @@ export function userBoard({ users, groups }) {
 
   /* merge core stats */
   const data = users
-    .map(u => {
-      const ev = u.events?.[0];
-      if (!ev || !ev.userAuditRatio) return null;
+  .map(u => {
+    const ev = u.events?.[0];
 
-      const ex = extra[u.login] ?? { xp: 0, details: [] };
+    if (!ev || ev.userAuditRatio == null) return null;
 
-      return {
-        login: u.login,
-        canAccess: u.canAccessPlatform,
-        level: ev.level ?? 0,
-        audit: ev.userAuditRatio,
-        joined: new Date(ev.createdAt)
-          .toLocaleDateString(),
-        name: ev.userName ?? 'Unknown',
-        xpNum: ex.xp,
-        xpStr: formatXP(ex.xp),
-        projCount: ex.details.length,
-        projects: ex.details
-      };
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.xpNum - a.xpNum);      // XP ↓
+    // normalize audit to a Number
+    const auditNum = typeof ev.userAuditRatio === 'number'
+      ? ev.userAuditRatio
+      : parseFloat(ev.userAuditRatio);
+
+    const ex = extra[u.login] ?? { xp: 0, details: [] };
+
+    return {
+      login: u.login,
+      canAccess: u.canAccessPlatform,
+      level: ev.level ?? 0,
+      audit: Number.isFinite(auditNum) ? auditNum : 0,  // fallback
+      joined: new Date(ev.createdAt).toLocaleDateString(),
+      name: ev.userName ?? 'Unknown',
+      xpNum: ex.xp,
+      xpStr: formatXP(ex.xp),
+      projCount: ex.details.length,
+      projects: ex.details
+    };
+  })
+  .filter(Boolean)
+  .sort((a, b) => b.xpNum - a.xpNum);      // XP ↓
 
   /* join‑date filter */
   const joinDates = [...new Set(data.map(u => u.joined))]
