@@ -79,6 +79,7 @@ export function userBoard({ users, groups }) {
     };
   })
   .filter(Boolean)
+  .filter(u => u.login !== "asadiqui")      // Exclude legacy users
   .sort((a, b) => b.xpNum - a.xpNum);      // XP ↓
 
   /* join‑date filter */
