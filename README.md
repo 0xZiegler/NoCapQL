@@ -1,2 +1,2 @@
 # No God Schema
-## Hosted on: [nocapql.netlify.app](www.nocapql.netlify.app)
+## Hosted on: [nocapql.netlify.app](https://www.nocapql.netlify.app)
